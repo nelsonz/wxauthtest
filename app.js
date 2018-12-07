@@ -97,7 +97,6 @@ passport.use('weapp', new WeixinStrategy({
 	console.log(accessToken);
 	console.log(refreshToken);
 	console.log(profile);
-	req.login
 	done(null, profile);
 }));
 
