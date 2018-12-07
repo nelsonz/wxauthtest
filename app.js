@@ -71,7 +71,7 @@ passport.use('weapp', new WeixinStrategy({
 	scope: "weapp_login",
 	successRedirect: "/auth/account",
 	failureFlash: true
-}, function(accessToken, refreshToken, profile, done){
+}, function(accessToken, refreshToken, profile, done) { 
 	console.log(accessToken);
 	console.log(refreshToken);
 	console.log(profile);
@@ -82,7 +82,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 app.get('/auth/weapp', passport.authenticate('weapp', {
-  session: false, successRedirect: '/auth/account', failureRedirect:
+  session: false, successRedirect: '/auth/account'
 }));
 
 app.get('/auth/account', (req, res) => {
