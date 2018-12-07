@@ -44,9 +44,10 @@ mongoose.connection.on('error', (err) => {
 app.set('host', '68.183.225.172');
 app.set('port', '3030');
 app.use(logger('dev'));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+//app.use(cookieParser());
 app.use(expressValidator());
 app.use(session({
   resave: true,
@@ -58,8 +59,8 @@ app.use(session({
     autoReconnect: true,
   })
 }));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
+app.use(passport.session());
 
 passport.use('weapp', new WeixinStrategy({
 	provider: "weixin",
@@ -70,6 +71,7 @@ passport.use('weapp', new WeixinStrategy({
 	session: true,
 	scope: "weapp_login",
 	successRedirect: "/auth/account",
+	passReqToCallback: true,
 	failureFlash: true
 }, function(accessToken, refreshToken, profile, done) { 
 	console.log(accessToken);
@@ -86,6 +88,8 @@ app.get('/auth/weapp', passport.authenticate('weapp', {
 }));
 
 app.get('/auth/account', (req, res) => {
+  console.log(req.user);
+  console.log(req.session);
   res.json(Object.assign({result_status:'ok'}, req.params, req.query));
 });
 
