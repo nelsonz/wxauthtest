@@ -47,7 +47,7 @@ app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(cookieParser());
+app.use(cookieParser());
 app.use(expressValidator());
 app.use(session({
   resave: true,
@@ -71,7 +71,7 @@ passport.use('weapp', new WeixinStrategy({
 	session: false,
 	scope: "weapp_login",
 	successRedirect: "/auth/account",
-	passReqToCallback: true,
+	//passReqToCallback: true,
 	failureFlash: true
 }, function(accessToken, refreshToken, profile, done) { 
 	console.log(accessToken);
