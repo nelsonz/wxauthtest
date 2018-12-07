@@ -97,15 +97,24 @@ passport.use('weapp', new WeixinStrategy({
 	console.log(accessToken);
 	console.log(refreshToken);
 	console.log(profile);
-	done(null, profile._json);
+	req.login
+	done(null, profile);
 }));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-app.get('/auth/weapp', passport.authenticate('weapp', {
-  session: false, successRedirect: '/auth/account'
-}));
+app.get('/auth/weapp', function(req, res, next) {
+	passport.authenticate('weapp', function(err, user) {
+		console.log(user);
+		req.logIn(user, function (err) {
+			if (err) {
+				return next(err);
+			}
+				return res.redirect('/auth/account');
+		});
+	})
+});
 
 app.get('/auth/account', (req, res) => {
   console.log(req.user);
