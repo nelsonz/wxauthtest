@@ -42,7 +42,7 @@ mongoose.connection.on('error', (err) => {
 });
 
 app.set('host', '68.183.225.172');
-app.set('port', '3000');
+app.set('port', '3030');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -61,25 +61,28 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 
-passport.use('weapp',new WeixinStrategy({
-  provider: "weixin",
-  clientID: 'wx042a813fd18f7f47',
-  clientSecret: '387aa86ab9e96afd52600d9d52160450',
-  requireState: false,
-  authorizationURL: "https://api.weixin.qq.com/sns/jscode2session",
-  session: false,
-  scope: "weapp_login",
-  successRedirect: "/auth/account",
-  failureFlash: true
+passport.use('weapp', new WeixinStrategy({
+	provider: "weixin",
+	clientID: 'wx042a813fd18f7f47',
+	clientSecret: '387aa86ab9e96afd52600d9d52160450',
+	requireState: false,
+	authorizationURL: "https://api.weixin.qq.com/sns/jscode2session",
+	session: false,
+	scope: "weapp_login",
+	successRedirect: "/auth/account",
+	failureFlash: true
 }, function(accessToken, refreshToken, profile, done){
-  done(null, profile);
+	console.log(accessToken);
+	console.log(refreshToken);
+	console.log(profile);
+	done(null, profile);
 }));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 app.get('/auth/weapp', passport.authenticate('weapp', {
-  session: false, successRedirect: '/auth/account'
+  session: false, successRedirect: '/auth/account', failureRedirect:
 }));
 
 app.get('/auth/account', (req, res) => {
