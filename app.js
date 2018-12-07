@@ -68,7 +68,7 @@ passport.use('weapp', new WeixinStrategy({
 	clientSecret: '387aa86ab9e96afd52600d9d52160450',
 	requireState: false,
 	authorizationURL: "https://api.weixin.qq.com/sns/jscode2session",
-	session: true,
+	session: false,
 	scope: "weapp_login",
 	successRedirect: "/auth/account",
 	passReqToCallback: true,
@@ -84,7 +84,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 app.get('/auth/weapp', passport.authenticate('weapp', {
-  session: true, successRedirect: '/auth/account'
+  session: false, successRedirect: '/auth/account'
 }));
 
 app.get('/auth/account', (req, res) => {
