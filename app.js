@@ -112,7 +112,7 @@ app.get('/auth/weapp', function(req, res, next) {
 			}
 				return res.redirect('/auth/account');
 		});
-	})
+	})(req, res, next);	
 });
 
 app.get('/auth/account', (req, res) => {
