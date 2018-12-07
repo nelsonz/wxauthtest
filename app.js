@@ -20,7 +20,21 @@ var providers = require('./providers.json');
 
 var app = express();
 
+passport.serializeUser(function(user, done) {
+  console.log("SERIALIZING USER");
+  console.log(user);
+  console.log("----------------");
+  userdb.push(user);
+  done(null, user.id);
+});
 
+passport.deserializeUser(function(id, done) {
+  console.log("DESERIALIZING ID");
+  console.log(id);
+  console.log("Current user db:");
+  console.log(userdb);
+  done(null, user);
+});
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -64,21 +78,7 @@ app.use(passport.session());
 
 
 
-passport.serializeUser(function(user, done) {
-  console.log("SERIALIZING USER");
-  console.log(user);
-  console.log("----------------");
-  userdb.push(user);
-  done(null, user.id);
-});
 
-passport.deserializeUser(function(id, done) {
-  console.log("DESERIALIZING ID");
-  console.log(id);
-  console.log("Current user db:");
-  console.log(userdb);
-  done(null, user);
-});
 
 
 
