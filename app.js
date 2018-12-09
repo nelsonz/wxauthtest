@@ -108,15 +108,15 @@ app.get('/auth/weapp', function(req, res, next) {
 			if (err) {
 				return next(err);
 			}
-			console.log(user);
 			return res.redirect('/auth/account');
 		});
 	})(req, res, next);	
 });
 
-app.get('/auth/account', passport.authenticate('weapp', {failureRedirect: '/'}), function(req, res) {
+app.get('/auth/account', /*passport.authenticate('weapp', {failureRedirect: '/'}), */function(req, res) {
   console.log(req.user);
   console.log(req.session);
+  console.log(req.isAuthenticated());
   res.json(Object.assign({result_status:'ok'}, req.params, req.query));
 });
 
