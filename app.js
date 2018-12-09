@@ -24,7 +24,7 @@ passport.serializeUser(function(user, done) {
   console.log("SERIALIZING USER");
   console.log(user);
   userdb.push(user);
-  done(null, user.id);
+  done(null, user._json);
 });
 
 passport.deserializeUser(function(id, done) {
