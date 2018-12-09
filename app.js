@@ -21,6 +21,8 @@ var providers = require('./providers.json');
 var app = express();
 
 passport.serializeUser(function(user, done) {
+  console.log("SERIALIZING USER");
+  console.log(user);
   userdb.push(user);
   done(null, user.id);
 });
