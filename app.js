@@ -22,9 +22,10 @@ var app = express();
 
 passport.serializeUser(function(user, done) {
   console.log("SERIALIZING USER");
-  console.log(user);
+  console.log(user._json);
+  console.log(user._json.openid);
   userdb.push(user);
-  done(null, user._json);
+  done(null, user._json.openid);
 });
 
 passport.deserializeUser(function(id, done) {
