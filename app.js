@@ -67,7 +67,11 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: "imakestuff",
-  cookie: { maxAge: 1209600000 }, // two weeks in milliseconds
+  cookie: {
+	  secure: false,
+	  httpOnly: false,
+	  maxAge: 1209600000
+  }, // two weeks in milliseconds
   store: new MongoStore({
     url: "mongodb://tencloud:imakestuff@68.183.225.172:27017/test",
     autoReconnect: true,
