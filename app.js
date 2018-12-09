@@ -22,23 +22,6 @@ var app = express();
 
 var userdb = {};
 
-passport.serializeUser(function(user, done) {
-  console.log("SERIALIZING USER");
-  user.id = user._json.openid;
-  console.log(user._json);
-  console.log(user._json.openid);
-  userdb[user._json.openid] = user;
-  done(null, user._json.openid);
-});
-
-passport.deserializeUser(function(user, done) {
-  console.log("DESERIALIZING ID");
-  console.log(user);
-  console.log("Current user db:");
-  console.log(userdb);
-  done(null, userdb[user.id]);
-});
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -62,7 +45,7 @@ app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(cookieParser("imakestuff"));
 app.use(expressValidator());
 app.use(session({
   resave: true,
@@ -104,6 +87,21 @@ passport.use('weapp', new WeixinStrategy({
 	done(null, profile);
 }));
 
+passport.serializeUser(function(user, done) {
+  console.log("SERIALIZING USER");
+  user.id = user._json.openid;
+  userdb[user._json.openid] = user;
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  console.log("DESERIALIZING ID");
+  console.log(user);
+  console.log("Current user db:");
+  console.log(userdb);
+  done(null, user);
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
@@ -115,8 +113,9 @@ app.get('/auth/weapp', function(req, res, next) {
 				return next(err);
 			}
 			console.log(req.session);
-			console.log(req.user);
-			return res.redirect('/auth/account');
+			req.session.save(function() {
+				return res.redirect('/auth/account');
+			});
 		});
 	})(req, res, next);	
 });
