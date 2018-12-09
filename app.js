@@ -20,26 +20,27 @@ var providers = require('./providers.json');
 
 var app = express();
 
+var userdb = {};
+
 passport.serializeUser(function(user, done) {
   console.log("SERIALIZING USER");
+  user.id = user._json.openid;
   console.log(user._json);
   console.log(user._json.openid);
-  userdb.push(user);
+  userdb[user._json.openid] = user;
   done(null, user._json.openid);
 });
 
-passport.deserializeUser(function(id, done) {
+passport.deserializeUser(function(user, done) {
   console.log("DESERIALIZING ID");
-  console.log(id);
+  console.log(user);
   console.log("Current user db:");
   console.log(userdb);
-  done(null, user);
+  done(null, userdb[user.id]);
 });
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
-var userdb = [];
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -108,6 +109,7 @@ app.use('/users', usersRouter);
 
 app.get('/auth/weapp', function(req, res, next) {
 	passport.authenticate('weapp', function(err, user) {
+		user.id = user._json.openid;
 		req.login(user, function (err) {
 			if (err) {
 				return next(err);
