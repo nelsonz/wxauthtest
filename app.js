@@ -21,9 +21,6 @@ var providers = require('./providers.json');
 var app = express();
 
 passport.serializeUser(function(user, done) {
-  console.log("SERIALIZING USER");
-  console.log(user);
-  console.log("----------------");
   userdb.push(user);
   done(null, user.id);
 });
@@ -96,7 +93,6 @@ passport.use('weapp', new WeixinStrategy({
 }, function(accessToken, refreshToken, profile, done) { 
 	console.log(accessToken);
 	console.log(refreshToken);
-	console.log(profile);
 	done(null, profile);
 }));
 
@@ -105,8 +101,7 @@ app.use('/users', usersRouter);
 
 app.get('/auth/weapp', function(req, res, next) {
 	passport.authenticate('weapp', function(err, user) {
-		console.log(user);
-		req.logIn(user, function (err) {
+		req.login(user, function (err) {
 			if (err) {
 				return next(err);
 			}
@@ -115,7 +110,7 @@ app.get('/auth/weapp', function(req, res, next) {
 	})(req, res, next);	
 });
 
-app.get('/auth/account', (req, res) => {
+app.get('/auth/account', passport.authenticate('weapp', {failureRedirect: '/'}), function(req, res) {
   console.log(req.user);
   console.log(req.session);
   res.json(Object.assign({result_status:'ok'}, req.params, req.query));
