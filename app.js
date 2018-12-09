@@ -112,6 +112,8 @@ app.get('/auth/weapp', function(req, res, next) {
 			if (err) {
 				return next(err);
 			}
+			console.log(req.session);
+			console.log(req.user);
 			return res.redirect('/auth/account');
 		});
 	})(req, res, next);	
