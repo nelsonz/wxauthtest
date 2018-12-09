@@ -108,7 +108,8 @@ app.get('/auth/weapp', function(req, res, next) {
 			if (err) {
 				return next(err);
 			}
-				return res.redirect('/auth/account');
+			console.log(user);
+			return res.redirect('/auth/account');
 		});
 	})(req, res, next);	
 });
